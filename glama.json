@@ -1,0 +1,77 @@
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "kenya-health-mcp",
+  "description": "MCP server for Kenya health system data \u2014 NHIF/SHA contributions, public facility registry (47 counties), maternal health protocols, and Article 43 constitutional health rights in English and Kiswahili.",
+  "license": "MIT",
+  "homepage": "https://github.com/gabrielmahia/kenya-health-mcp",
+  "maintainers": [
+    "gabrielmahia"
+  ],
+  "version": "0.1.0",
+  "author": {
+    "name": "Gabriel Mahia",
+    "email": "contact@aikungfu.dev",
+    "url": "https://gabrielmahia.github.io"
+  },
+  "keywords": [
+    "kenya",
+    "health",
+    "nhif",
+    "sha",
+    "mcp",
+    "africa",
+    "maternal-health",
+    "east-africa",
+    "article-43"
+  ],
+  "tools": [
+    {
+      "name": "get_nhif_contribution",
+      "description": "NHIF/SHA monthly contribution for any gross salary",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true
+      }
+    },
+    {
+      "name": "find_facility",
+      "description": "Public health facilities by Kenya county and KEPH level",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true
+      }
+    },
+    {
+      "name": "get_maternal_protocol",
+      "description": "Kenya antenatal care schedule and Linda Mama free maternity guide",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true
+      }
+    },
+    {
+      "name": "get_health_right",
+      "description": "Constitution of Kenya 2010 Article 43 health rights EN/SW",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true
+      }
+    }
+  ],
+  "related": [
+    {
+      "name": "mpesa-mcp",
+      "url": "https://glama.ai/mcp/servers/gabrielmahia/mpesa-mcp",
+      "description": "M-Pesa payments MCP (4,000+ downloads)"
+    },
+    {
+      "name": "wapimaji-mcp",
+      "url": "https://glama.ai/mcp/servers/gabrielmahia/wapimaji-mcp",
+      "description": "Kenya drought intelligence MCP"
+    }
+  ]
+}
