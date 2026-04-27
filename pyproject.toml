@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kenya-health-mcp"
+version = "0.1.0"
+description = "MCP server for Kenya health data — NHIF, facilities, maternal health, health rights EN/SW"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Gabriel Mahia", email = "contact@aikungfu.dev"}]
+keywords = ["kenya","health","nhif","mcp","africa","maternal-health","east-africa"]
+requires-python = ">=3.10"
+dependencies = ["mcp>=1.0.0", "python-dotenv>=1.0.0"]
+
+[project.scripts]
+kenya-health-mcp = "kenya_health_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/gabrielmahia/kenya-health-mcp"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
