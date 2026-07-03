@@ -1,8 +1,6 @@
 """Smoke tests — import validation and basic instantiation."""
 import ast
 import pathlib
-import importlib
-import sys
 
 
 def test_all_sources_parse():
@@ -23,9 +21,6 @@ def test_package_importable():
     """Top-level package must be importable without errors."""
     try:
         import kenya_health_mcp  # noqa: F401
-        imported = True
     except ImportError:
-        # Acceptable if deps not installed in test env — just verify no SyntaxError
-        imported = False
-    # Either imported or gracefully failed — both are acceptable
-    assert True
+        # Acceptable if optional deps absent in test env — SyntaxError is not.
+        pass
