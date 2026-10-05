@@ -3,11 +3,10 @@ from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("kenya-health-mcp")
 
-NHIF_RATES = [
-    (5999,150),(7999,300),(11999,400),(14999,500),(19999,600),(24999,750),
-    (29999,850),(34999,900),(39999,950),(44999,1000),(49999,1100),(59999,1200),
-    (69999,1300),(79999,1400),(89999,1500),(99999,1600),(float("inf"),1700),
-]
+# SHIF replaced NHIF in October 2024: 2.75% of gross, minimum KES 300, no cap, paid by the employee only (no employer match).
+# Rates are from consistent secondary sources (law-firm and payroll-provider summaries) checked on 2026-10-04, not the SHA primary text.
+SHIF_RATE = 0.0275
+SHIF_MINIMUM_KES = 300.0
 
 FACILITIES = {
     "Nairobi": [
@@ -29,8 +28,8 @@ RIGHTS = {
         "sw": "Kifungu 43(1)(a): Kila mtu ana haki ya kiwango cha juu zaidi cha afya, ikiwemo haki ya huduma za afya.",
     },
     "maternal": {
-        "en": "Linda Mama Programme: Free maternity services at all public health facilities — delivery, postnatal care, and newborn care. No payment required.",
-        "sw": "Mpango wa Linda Mama: Huduma za uzazi bure katika vituo vyote vya afya vya umma. Hakuna malipo yanayohitajika.",
+        "en": "Maternity care is now provided through the Social Health Authority (SHA), which replaced NHIF in 2024. The NHIF-era Linda Mama programme is no longer a separate scheme. Reported arrangement: antenatal and postnatal visits through the Primary Healthcare Fund at levels 2 and 3, delivery through SHIF, with prior SHA registration. Reports about details conflict; verify with SHA (sha.go.ke) before relying on any of it.",
+        "sw": "Huduma za uzazi sasa zinatolewa kupitia Mamlaka ya Afya ya Jamii (SHA), iliyochukua nafasi ya NHIF mwaka 2024. Mpango wa Linda Mama wa enzi za NHIF si mpango tofauti tena. Utaratibu unaoripotiwa: kliniki za kabla na baada ya kujifungua kupitia Hazina ya Huduma ya Afya ya Msingi (ngazi ya 2 na 3), kujifungua kupitia SHIF, na usajili wa SHA kabla ya kujifungua. Ripoti kuhusu maelezo zinatofautiana; thibitisha na SHA (sha.go.ke) kabla ya kutegemea.",
     },
     "emergency": {
         "en": "Article 43(3): The State shall provide appropriate social security to persons who are unable to support themselves and their dependants.",
@@ -39,22 +38,40 @@ RIGHTS = {
 }
 
 
+def _shif(gross_salary_kes: float) -> float:
+    return max(SHIF_MINIMUM_KES, round(gross_salary_kes * SHIF_RATE, 2))
+
+
 @mcp.tool()
-def get_nhif_contribution(gross_salary_kes: float) -> dict:
+def get_shif_contribution(gross_salary_kes: float) -> dict:
     """
-    Get the NHIF/SHA monthly contribution for a given gross salary in Kenya Shillings.
-    Returns employee contribution, employer match, and total monthly cost.
+    Get the monthly Social Health Insurance Fund (SHIF) contribution for a gross salary in Kenya Shillings.
+    SHIF replaced NHIF in October 2024: 2.75% of gross, minimum KES 300, no cap, paid by the employee only.
     gross_salary_kes: Monthly gross salary in KES
     """
-    contribution = next(amt for ceiling, amt in NHIF_RATES if gross_salary_kes <= ceiling)
+    if gross_salary_kes <= 0:
+        return {"error": "gross_salary_kes must be greater than zero"}
+    contribution = _shif(gross_salary_kes)
     return {
         "gross_salary_kes": gross_salary_kes,
         "employee_contribution_kes": contribution,
-        "employer_match_kes": contribution,
-        "total_monthly_kes": contribution * 2,
-        "source": "NHIF Act / SHA Act 2023",
-        "note": "Verify current rates at nhif.or.ke or sha.go.ke",
+        "employer_match_kes": 0.0,
+        "total_monthly_kes": contribution,
+        "rate": "2.75% of gross, minimum KES 300, no cap, employee only",
+        "source": "Social Health Insurance Act 2023 (rates from secondary summaries, checked 2026-10-04; not the SHA primary text)",
+        "note": "Verify current rates at sha.go.ke",
     }
+
+
+@mcp.tool()
+def get_nhif_contribution(gross_salary_kes: float) -> dict:
+    """
+    DEPRECATED NAME. NHIF was repealed and replaced by SHIF in October 2024; this returns the SHIF contribution.
+    Use get_shif_contribution. gross_salary_kes: Monthly gross salary in KES
+    """
+    result = get_shif_contribution(gross_salary_kes)
+    result["deprecated"] = "NHIF no longer exists; this tool name is kept for compatibility and returns the SHIF contribution. Use get_shif_contribution."
+    return result
 
 
 @mcp.tool()
@@ -81,12 +98,13 @@ def find_facility(county: str, level: int = 0) -> dict:
 @mcp.tool()
 def get_maternal_protocol() -> dict:
     """
-    Get Kenya antenatal care schedule and Linda Mama free maternity programme details.
+    Get the Kenya antenatal care schedule and how maternity care is covered now that SHA has replaced NHIF (Linda Mama status below).
     Includes ANC visit schedule, postnatal care, newborn vaccines, and birth registration.
     """
     return {
-        "programme": "Linda Mama Free Maternity",
-        "coverage": "Free delivery, postnatal care, and newborn care at ALL public facilities",
+        "programme": "Maternity care under SHA (the NHIF-era Linda Mama programme is no longer a separate scheme)",
+        "coverage": "Reported: antenatal and postnatal visits through the Primary Healthcare Fund (levels 2 and 3); delivery through SHIF; prior SHA registration required. Reports conflict on details; verify with SHA (sha.go.ke).",
+        "status_checked": "2026-10-04, from news and explainer sources, not the SHA primary text",
         "antenatal_visits": [
             {"visit": 1, "timing": "Before 12 weeks", "focus": "Booking, blood tests, HIV, tetanus, iron+folic"},
             {"visit": 2, "timing": "20 weeks",         "focus": "Ultrasound, growth check, dental"},
