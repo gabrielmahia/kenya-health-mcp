@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.gabrielmahia/kenya-health-mcp",
-  "description": "\ud83c\udfe5 Kenya Health MCP",
+  "description": "Kenya health MCP: SHIF contribution calculator, public facility registry, maternity care under SHA, Article 43 health rights",
   "repository": {
     "url": "https://github.com/gabrielmahia/kenya-health-mcp",
     "source": "github"
   },
-  "version": "0.1.3",
+  "version": "0.1.4",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "kenya-health-mcp",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "transport": {
         "type": "stdio"
       }
