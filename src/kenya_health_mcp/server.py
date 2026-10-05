@@ -4,7 +4,7 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP("kenya-health-mcp")
 
 # SHIF replaced NHIF in October 2024: 2.75% of gross, minimum KES 300, no cap, paid by the employee only (no employer match).
-# Rates are from consistent secondary sources (law-firm and payroll-provider summaries) checked on 2026-10-04, not the SHA primary text.
+# Rate, minimum and absence of a cap confirmed on the official SHA site (sha.go.ke/premium-rates) on 2026-10-05; that page describes deduction from the employee's gross salary and states no employer share.
 SHIF_RATE = 0.0275
 SHIF_MINIMUM_KES = 300.0
 
@@ -58,7 +58,7 @@ def get_shif_contribution(gross_salary_kes: float) -> dict:
         "employer_match_kes": 0.0,
         "total_monthly_kes": contribution,
         "rate": "2.75% of gross, minimum KES 300, no cap, employee only",
-        "source": "Social Health Insurance Act 2023 (rates from secondary summaries, checked 2026-10-04; not the SHA primary text)",
+        "source": "Social Health Insurance Act 2023; rate confirmed on sha.go.ke/premium-rates (checked 2026-10-05)",
         "note": "Verify current rates at sha.go.ke",
     }
 
