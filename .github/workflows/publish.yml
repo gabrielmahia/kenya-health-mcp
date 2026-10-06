@@ -46,6 +46,7 @@ jobs:
   registry:
     name: Publish to MCP Registry
     needs: pypi
+    if: github.event_name == 'push'   # a manual run is a dry run of the PyPI job only; the registry rejects an already-published version
     runs-on: ubuntu-latest
     permissions:
       id-token: write
