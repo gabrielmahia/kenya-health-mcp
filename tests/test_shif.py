@@ -39,11 +39,12 @@ def test_maternity_text_no_longer_promises_free_delivery_at_all_public_facilitie
     assert "all public facilities" not in text and "registration" in text and "sha" in text
 
 
-def test_mcp_dependency_is_pinned_below_2():
-    """mcp 2.x removed mcp.server.fastmcp, so an unbounded 'mcp>=1.0.0' made a fresh install unable to import this server."""
+def test_fastmcp_dependency_is_the_standalone_framework_bounded_to_the_tested_major():
+    """The server moved off mcp.server.fastmcp (removed in MCP SDK 2.0) to the standalone fastmcp, which serves both protocol eras. Pin it to the major we test."""
     import pathlib
     import re
 
-    pyproject = (pathlib.Path(__file__).resolve().parents[1] / "pyproject.toml").read_text(encoding="utf-8")
-    spec = re.search(r'"(mcp[<>=!~][^"]*)"', pyproject)  # a dependency string (has a version operator), not the "mcp" keyword
-    assert spec and re.search(r"<\s*2", spec.group(1)), f"mcp must be pinned below 2, found {spec.group(1) if spec else None}"
+    text = (pathlib.Path(__file__).resolve().parents[1] / "pyproject.toml").read_text(encoding="utf-8")
+    deps = re.search(r"^dependencies\s*=\s*\[(.*?)\]", text, re.DOTALL | re.MULTILINE).group(1)
+    assert re.search(r"fastmcp>=4,\s*<5", deps), deps
+    assert "mcp>=1.0.0" not in deps, "the old mcp<2 pin must be gone"

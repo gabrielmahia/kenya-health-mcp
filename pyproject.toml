@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kenya-health-mcp"
-version = "0.1.4"
+version = "0.1.5"
 description = "MCP server for Kenya health data — NHIF, facilities, maternal health, health rights EN/SW"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["kenya","health","nhif","shif","sha","mcp","africa","maternal-health","east-africa"]
 requires-python = ">=3.10"
-dependencies = ["mcp>=1.0.0,<2", "python-dotenv>=1.0.0"]
+dependencies = ["fastmcp>=4,<5", "python-dotenv>=1.0.0"]
 
 [project.scripts]
 kenya-health-mcp = "kenya_health_mcp.server:main"

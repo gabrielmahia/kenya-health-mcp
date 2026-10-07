@@ -1,5 +1,5 @@
 """KenyaHealthMCP — Kenya health data MCP server."""
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 
 mcp = FastMCP("kenya-health-mcp")
 
