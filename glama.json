@@ -1,7 +1,7 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "kenya-health-mcp",
-  "description": "MCP server for Kenya health system data — SHIF contributions (NHIF was replaced by SHIF/SHA in October 2024), public facility registry (47 counties), maternity care under SHA, and Article 43 constitutional health rights in English and Kiswahili.",
+  "description": "MCP server for Kenya health data — NHIF, facilities, maternal health, health rights EN/SW",
   "license": "MIT",
   "homepage": "https://github.com/gabrielmahia/kenya-health-mcp",
   "maintainers": [
@@ -27,7 +27,7 @@
   "tools": [
     {
       "name": "get_shif_contribution",
-      "description": "Monthly SHIF contribution for a gross salary: 2.75% of gross, minimum KES 300, no cap, employee only",
+      "description": "Get the monthly Social Health Insurance Fund (SHIF) contribution for a gross salary in Kenya Shillings.\n    SHIF replaced NHIF in October 2024: 2.75% of gross, minimum KES 300, no cap, paid by the employee only.\n    gross_salary_kes: Monthly gross salary in KES",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -36,7 +36,7 @@
     },
     {
       "name": "get_nhif_contribution",
-      "description": "DEPRECATED name, returns the SHIF contribution; use get_shif_contribution",
+      "description": "DEPRECATED NAME. NHIF was repealed and replaced by SHIF in October 2024; this returns the SHIF contribution.\n    Use get_shif_contribution. gross_salary_kes: Monthly gross salary in KES",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -45,7 +45,7 @@
     },
     {
       "name": "find_facility",
-      "description": "Public health facilities by Kenya county and KEPH level",
+      "description": "Find public health facilities in a Kenya county.\n    county: Kenya county name e.g. Nairobi, Mombasa, Kisumu, Nakuru\n    level: KEPH facility level — 4=District, 5=Regional Referral, 6=National Referral (0=all)",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -54,7 +54,7 @@
     },
     {
       "name": "get_maternal_protocol",
-      "description": "Kenya antenatal care schedule and how maternity care is covered under SHA (Linda Mama status; verify with SHA)",
+      "description": "Get the Kenya antenatal care schedule and how maternity care is covered now that SHA has replaced NHIF (Linda Mama status below).\n    Includes ANC visit schedule, postnatal care, newborn vaccines, and birth registration.",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -63,7 +63,7 @@
     },
     {
       "name": "get_health_right",
-      "description": "Constitution of Kenya 2010 Article 43 health rights EN/SW",
+      "description": "Get Kenya constitutional health rights under Article 43 of the Constitution of Kenya 2010.\n    topic: healthcare, maternal, emergency\n    language: en (English) or sw (Kiswahili)",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
