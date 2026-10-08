@@ -1,6 +1,9 @@
 """KenyaHealthMCP — Kenya health data MCP server."""
 from fastmcp import FastMCP
 
+# Annotations tell clients which tools are safe to auto-approve (read-only, no side effects).
+READ_ONLY = {"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False}
+
 mcp = FastMCP("kenya-health-mcp")
 
 # SHIF replaced NHIF in October 2024: 2.75% of gross, minimum KES 300, no cap, paid by the employee only (no employer match).
@@ -42,7 +45,7 @@ def _shif(gross_salary_kes: float) -> float:
     return max(SHIF_MINIMUM_KES, round(gross_salary_kes * SHIF_RATE, 2))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def get_shif_contribution(gross_salary_kes: float) -> dict:
     """
     Get the monthly Social Health Insurance Fund (SHIF) contribution for a gross salary in Kenya Shillings.
@@ -63,7 +66,7 @@ def get_shif_contribution(gross_salary_kes: float) -> dict:
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def get_nhif_contribution(gross_salary_kes: float) -> dict:
     """
     DEPRECATED NAME. NHIF was repealed and replaced by SHIF in October 2024; this returns the SHIF contribution.
@@ -74,7 +77,7 @@ def get_nhif_contribution(gross_salary_kes: float) -> dict:
     return result
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def find_facility(county: str, level: int = 0) -> dict:
     """
     Find public health facilities in a Kenya county.
@@ -88,14 +91,13 @@ def find_facility(county: str, level: int = 0) -> dict:
     return {
         "county": county_clean,
         "facilities": facilities,
-        "note": f"{'No facility data for ' + county_clean + '. ' if not facilities else ''}Call county health department or 0800 720 021 (free).",
-        "emergency_line": "0800 720 021 (free 24hr)",
-        "ambulance": "999 or 0800 723 253",
-        "source": "Ministry of Health Kenya facility registry",
+        "note": f"{'No facility data for ' + county_clean + '. ' if not facilities else ''}Call your county health department. In an emergency call 999 or 112.",
+        "emergency": "999 or 112 (Kenya Red Cross 1199)",
+        "source": "A small hand-compiled sample of well-known facilities. NOT the Kenya Master Health Facility List (kmhfl.health.go.ke): it is incomplete and unverified",
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def get_maternal_protocol() -> dict:
     """
     Get the Kenya antenatal care schedule and how maternity care is covered now that SHA has replaced NHIF (Linda Mama status below).
@@ -127,7 +129,7 @@ def get_maternal_protocol() -> dict:
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def get_health_right(topic: str = "healthcare", language: str = "en") -> dict:
     """
     Get Kenya constitutional health rights under Article 43 of the Constitution of Kenya 2010.
