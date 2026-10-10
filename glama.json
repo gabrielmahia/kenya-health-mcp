@@ -1,7 +1,7 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "kenya-health-mcp",
-  "description": "MCP server for Kenya health data — NHIF, facilities, maternal health, health rights EN/SW",
+  "description": "MCP server for Kenya health data: SHIF contributions (NHIF's successor), a small facility sample, maternal health, health rights EN/SW",
   "license": "MIT",
   "homepage": "https://github.com/gabrielmahia/kenya-health-mcp",
   "maintainers": [
