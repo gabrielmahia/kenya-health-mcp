@@ -4,7 +4,7 @@
   "project": "kenya-health-mcp",
   "stable_branch": "main",
   "integration_branch": "main",
-  "purpose": "MCP server for Kenya health data — NHIF, facilities, maternal health, health rights EN/SW.",
+  "purpose": "MCP server for Kenya health data: SHIF contributions (NHIF's successor), a small facility sample, maternal health, health rights EN/SW.",
   "cold_start": [
     "AGENTS.md",
     "README.md"
