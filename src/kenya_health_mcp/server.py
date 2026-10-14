@@ -1,5 +1,8 @@
 """KenyaHealthMCP — Kenya health data MCP server."""
+from typing import Annotated
+
 from fastmcp import FastMCP
+from pydantic import Field
 
 # Annotations tell clients which tools are safe to auto-approve (read-only, no side effects).
 READ_ONLY = {"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False}
@@ -45,8 +48,8 @@ def _shif(gross_salary_kes: float) -> float:
     return max(SHIF_MINIMUM_KES, round(gross_salary_kes * SHIF_RATE, 2))
 
 
-@mcp.tool(annotations=READ_ONLY)
-def get_shif_contribution(gross_salary_kes: float) -> dict:
+@mcp.tool(description="Calculate the monthly Social Health Insurance Fund (SHIF) contribution for a gross monthly salary in KES. Use when someone asks what SHIF takes from their pay. SHIF replaced NHIF in October 2024: 2.75% of gross pay, minimum KES 300, no cap, paid by the employee only. Returns gross_salary_kes, employee_contribution_kes, employer_match_kes (0), total_monthly_kes, the rate, the source (Social Health Insurance Act 2023; sha.go.ke premium rates, checked 2026-10-05) and a note to verify current rates. Read-only.", annotations=READ_ONLY)
+def get_shif_contribution(gross_salary_kes: Annotated[float, Field(description="Gross monthly salary in KES.")]) -> dict:
     """
     Get the monthly Social Health Insurance Fund (SHIF) contribution for a gross salary in Kenya Shillings.
     SHIF replaced NHIF in October 2024: 2.75% of gross, minimum KES 300, no cap, paid by the employee only.
@@ -66,8 +69,8 @@ def get_shif_contribution(gross_salary_kes: float) -> dict:
     }
 
 
-@mcp.tool(annotations=READ_ONLY)
-def get_nhif_contribution(gross_salary_kes: float) -> dict:
+@mcp.tool(description="DEPRECATED NAME kept for compatibility: NHIF no longer exists. Use when a client still refers to NHIF; it returns exactly what get_shif_contribution returns plus a deprecated field, so prefer get_shif_contribution. Returns the SHIF contribution for the gross monthly salary in KES (2.75% of gross, minimum KES 300, no cap, employee only) with the source and a note to verify rates at sha.go.ke. Read-only.", annotations=READ_ONLY)
+def get_nhif_contribution(gross_salary_kes: Annotated[float, Field(description="Gross monthly salary in KES.")]) -> dict:
     """
     DEPRECATED NAME. NHIF was repealed and replaced by SHIF in October 2024; this returns the SHIF contribution.
     Use get_shif_contribution. gross_salary_kes: Monthly gross salary in KES
@@ -77,8 +80,8 @@ def get_nhif_contribution(gross_salary_kes: float) -> dict:
     return result
 
 
-@mcp.tool(annotations=READ_ONLY)
-def find_facility(county: str, level: int = 0) -> dict:
+@mcp.tool(description="Find sample public health facilities in a Kenyan county, optionally by KEPH level. Use when someone asks where to go for care. level: 4 district, 5 regional referral, 6 national referral, 0 for all. A small hand-compiled sample, NOT the Kenya Master Health Facility List (kmhfl.health.go.ke): it is incomplete, so an unknown county returns an empty list with a note, never a guess. Returns the county, the facilities, a note, the emergency numbers (999 or 112; Kenya Red Cross 1199) and the source label. Read-only.", annotations=READ_ONLY)
+def find_facility(county: Annotated[str, Field(description="Kenyan county name such as Nairobi, Mombasa, Kisumu or Nakuru.")], level: Annotated[int, Field(description="KEPH facility level: 4 district, 5 regional referral, 6 national referral; 0 for all (default).")] = 0) -> dict:
     """
     Find public health facilities in a Kenya county.
     county: Kenya county name e.g. Nairobi, Mombasa, Kisumu, Nakuru
@@ -97,7 +100,7 @@ def find_facility(county: str, level: int = 0) -> dict:
     }
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(description="Kenya's antenatal care schedule and how maternity care is covered now that SHA has replaced NHIF: antenatal visits, postnatal care, newborn vaccines and birth registration. Use when someone asks what care to expect in pregnancy and after birth. Takes no arguments. Returns the visit schedule, coverage notes (reported, not verified here), vaccine timing, birth registration guidance and the source (Ministry of Health Kenya). General information, not medical advice. Read-only.", annotations=READ_ONLY)
 def get_maternal_protocol() -> dict:
     """
     Get the Kenya antenatal care schedule and how maternity care is covered now that SHA has replaced NHIF (Linda Mama status below).
@@ -129,8 +132,8 @@ def get_maternal_protocol() -> dict:
     }
 
 
-@mcp.tool(annotations=READ_ONLY)
-def get_health_right(topic: str = "healthcare", language: str = "en") -> dict:
+@mcp.tool(description="Kenya's constitutional health rights under Article 43 of the Constitution of Kenya 2010, by topic: healthcare, maternal or emergency. Use when someone asks what they are entitled to. An unknown topic returns an error listing the available topics. Returns the right, its legal basis and related articles. Not legal advice: check the Constitution on kenyalaw.org. Read-only.", annotations=READ_ONLY)
+def get_health_right(topic: Annotated[str, Field(description="healthcare (default), maternal or emergency.")] = "healthcare", language: Annotated[str, Field(description="Language code for the text (default en).")] = "en") -> dict:
     """
     Get Kenya constitutional health rights under Article 43 of the Constitution of Kenya 2010.
     topic: healthcare, maternal, emergency
