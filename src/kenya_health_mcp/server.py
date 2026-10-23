@@ -1,4 +1,6 @@
 """KenyaHealthMCP — Kenya health data MCP server."""
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _pkg_version
 from typing import Annotated
 
 from fastmcp import FastMCP
@@ -7,7 +9,13 @@ from pydantic import Field
 # Annotations tell clients which tools are safe to auto-approve (read-only, no side effects).
 READ_ONLY = {"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False}
 
-mcp = FastMCP("kenya-health-mcp")
+try:
+    _VERSION = _pkg_version("kenya-health-mcp")
+except PackageNotFoundError:  # a source tree that was never installed
+    _VERSION = "0+unknown"
+
+
+mcp = FastMCP("kenya-health-mcp", version=_VERSION)
 
 # SHIF replaced NHIF in October 2024: 2.75% of gross, minimum KES 300, no cap, paid by the employee only (no employer match).
 # Rate, minimum and absence of a cap confirmed on the official SHA site (sha.go.ke/premium-rates) on 2026-10-05; that page describes deduction from the employee's gross salary and states no employer share.
