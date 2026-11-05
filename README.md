@@ -3,6 +3,12 @@
 MCP server for Kenya health information: a SHIF contribution calculator, a small hand-compiled facility sample (not the master facility list), the maternal care schedule and health rights. It has no live KHIS or DHIS2 connection.
 See also: [swahili-health-mcp](https://github.com/gabrielmahia/swahili-health-mcp)
 
+## Live data
+
+- `dhs_health_indicator`: official Kenya DHS 2022 figures (vaccination, stunting, skilled birth attendance, modern contraception, under-five mortality), nationally or by county, via the [DHS Program API](https://api.dhsprogram.com).
+
+Each live answer names its source, attribution and retrieval time; if a service does not answer, the tool returns an error instead of a number. The other tools are unchanged.
+
 ## IP & Collaboration
 
 MIT licensed. Feedback via GitHub Issues only — pull requests are not accepted. Demo data is labeled DEMO and is not suitable for operational decisions. Full policy: [docs/architecture/IP_POLICY.md](docs/architecture/IP_POLICY.md). Security reports: see [SECURITY.md](SECURITY.md).
