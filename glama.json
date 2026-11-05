@@ -7,7 +7,7 @@
   "maintainers": [
     "gabrielmahia"
   ],
-  "version": "0.1.13",
+  "version": "0.1.14",
   "author": {
     "name": "Gabriel Mahia",
     "email": "contact@aikungfu.dev",
@@ -68,6 +68,16 @@
         "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": true
+      }
+    },
+    {
+      "name": "dhs_health_indicator",
+      "description": "Get an official Kenya health indicator from the 2022 Kenya Demographic and Health Survey through the free DHS Program API, nationally or for one county: full child vaccination, child stunting, skilled birth attendance, modern contraceptive use or under-five mortality. Use when someone needs an authoritative survey figure for Kenya or a county, for planning, reporting or comparison. Returns the value or values with what each measures, the survey, the source with its citation and the retrieval time; on a network or service failure it returns an error instead of figures. Read-only; contacts an external service.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
       }
     }
   ],
