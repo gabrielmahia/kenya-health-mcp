@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kenya-health-mcp"
-version = "0.1.14"
+version = "0.1.15"
 description = "MCP server for Kenya health data: SHIF contributions (NHIF's successor), a small facility sample, maternal health, health rights EN/SW"
 readme = "README.md"
 license = "MIT"
@@ -24,6 +24,7 @@ classifiers = [
 kenya-health-mcp = "kenya_health_mcp.server:main"
 
 [project.urls]
+Issues = "https://github.com/gabrielmahia/kenya-health-mcp/issues"
 Homepage = "https://github.com/gabrielmahia/kenya-health-mcp"
 Documentation = "https://github.com/gabrielmahia/nairobi-stack"
 "MCP Registry" = "https://registry.modelcontextprotocol.io"
