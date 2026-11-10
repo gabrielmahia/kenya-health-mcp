@@ -3,7 +3,7 @@ message: "If you use this software, please cite it as below."
 type: software
 title: "kenya-health-mcp"
 abstract: "MCP server for Kenya health data: SHIF contributions (NHIF's successor), a small facility sample, maternal health, health rights EN/SW"
-version: "0.1.15"
+version: "0.1.16"
 authors:
   - family-names: "Mahia"
     given-names: "Gabriel"
