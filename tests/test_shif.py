@@ -46,5 +46,5 @@ def test_fastmcp_dependency_is_the_standalone_framework_bounded_to_the_tested_ma
 
     text = (pathlib.Path(__file__).resolve().parents[1] / "pyproject.toml").read_text(encoding="utf-8")
     deps = re.search(r"^dependencies\s*=\s*\[(.*?)\]", text, re.DOTALL | re.MULTILINE).group(1)
-    assert re.search(r"fastmcp>=4,\s*<5", deps), deps
+    assert re.search(r"fastmcp>=4(\.\d+)*,\s*<5", deps), deps   # major-4 floor (raised to 4.1.4 for known advisories) with a <5 cap
     assert "mcp>=1.0.0" not in deps, "the old mcp<2 pin must be gone"
